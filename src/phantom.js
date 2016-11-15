@@ -36,6 +36,7 @@ const defaultLogger = createLogger();
  * A phantom instance that communicates with phantomjs
  */
 export default class Phantom {
+    doing_NOOP: boolean;
     logger: Logger;
     commands: Map<string, Command>;
     events: Map<string, EventEmitter>;
@@ -98,8 +99,8 @@ export default class Phantom {
                 //Server end has finished NOOP,
                 //lets allow NOOP again..
                 if (message === '>NOOP') {
-                  this.doing_NOOP = false;
-                  return;
+                    this.doing_NOOP = false;
+                    return;
                 }
 
                 const json = message.substr(1);
@@ -325,7 +326,7 @@ export default class Phantom {
     _heartBeat(): void {
         if (this.commands.size === 0 && !this.doing_NOOP) {
             this.doing_NOOP = true;
-            this.process.stdin.write('NOOP' + _os2.default.EOL, 'utf8');
+            this.process.stdin.write('NOOP' + os.EOL, 'utf8');
             //this.execute('phantom', 'noop');
         }
     }
